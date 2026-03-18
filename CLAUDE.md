@@ -1,10 +1,10 @@
-# Amazon Document Writing Workspace
+# Amazon Document Writing Toolkit
 
-This Claude Code project is a workspace for writing Amazon-style narrative documents. It is template-driven — add a template to `templates/` for any new document type and the agents will follow it automatically.
+A Claude Code toolkit for writing Amazon-style narrative documents. Template-driven — add a template to `templates/` for any new document type and the agents will follow it automatically.
 
-## Available Agents
+After running `./install.sh`, all agents and commands are available globally from any directory.
 
-### Global agents (available in all Claude Code sessions after install)
+## Agents (installed globally)
 
 | Agent | Purpose |
 |---|---|
@@ -12,13 +12,7 @@ This Claude Code project is a workspace for writing Amazon-style narrative docum
 | `doc-writer` | Writes Amazon-style narrative prose using a template as the structural guide |
 | `doc-reviewer` | Critiques drafts against the template structure and Amazon writing standards |
 
-### Project agent
-
-| Agent | Purpose |
-|---|---|
-| `doc-orchestrator` | Runs the full pipeline for any document type, with human review gates |
-
-## Slash Commands
+## Slash Commands (installed globally)
 
 | Command | Usage |
 |---|---|
@@ -46,7 +40,9 @@ Or run the full pipeline at once:
 |---|---|
 | `6pager` | Long-form narrative: Introduction, Goals, Tenets, Current State, Lessons Learned, Path Forward |
 | `2pager` | Concise proposal: Problem, Solution, Impact, Ask |
+| `1pager` | Executive summary (~500-700 words) |
 | `op2-plan` | H2 operating plan: Retrospective, Goals, Initiatives, Risks, Investment asks, Headcount |
+| `prfaq` | Press release + FAQ (working backwards format) |
 
 ## Adding a new document type
 
@@ -60,11 +56,12 @@ Or run the full pipeline at once:
     outlines/       Approved outlines (auto-created)
     drafts/         Document drafts, versioned v1/v2/v3 (auto-created)
     reviews/        Review feedback (auto-created)
-    agents/         Agent source files (used by install.sh)
+    agents/         Agent source files (installed globally by install.sh)
+    .claude/commands/  Command source files (installed globally by install.sh)
 
 ## Source material
 
-Drop relevant files into this directory before starting:
+Drop relevant files into the working directory before starting:
 - Markdown notes (`.md`)
 - Data files (`.csv`, `.txt`)
 - Existing documents or bullet-point notes

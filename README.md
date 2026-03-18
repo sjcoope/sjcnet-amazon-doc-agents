@@ -1,13 +1,14 @@
 # Amazon Doc Agents
 
-A Claude Code workspace for writing Amazon-style narrative documents. Template-driven — works with any document type.
+A Claude Code toolkit for writing Amazon-style narrative documents. Template-driven — works with any document type, from any directory.
 
 ## Setup (once per machine)
 
 ```bash
 ./install.sh
-claude .
 ```
+
+This installs agents and slash commands globally to `~/.claude/`. After installation, you can use them from any directory.
 
 ## Usage
 
@@ -38,16 +39,18 @@ The full pipeline runs with a review gate after each stage:
 |---|---|
 | `6pager` | Long-form narrative (Introduction, Goals, Tenets, Current State, Lessons Learned, Path Forward) |
 | `2pager` | Concise proposal (Problem, Solution, Impact, Ask) |
+| `1pager` | Executive summary (~500-700 words) |
 | `op2-plan` | H2 operating plan (Retrospective, Goals, Initiatives, Risks, Investments, Headcount) |
+| `prfaq` | Press release + FAQ (working backwards format) |
 
 ### Adding a new template
 
 Create `templates/[name].md` with your sections, length targets, and guidance notes.
 The agents will follow whatever structure you define — no other changes needed.
 
-## Agents
+## What gets installed
 
-### Global (`~/.claude/agents/` — available everywhere after install)
+### Agents (`~/.claude/agents/`)
 
 | Agent | Model | What it does |
 |---|---|---|
@@ -55,11 +58,22 @@ The agents will follow whatever structure you define — no other changes needed
 | `doc-writer` | Sonnet | Writes prose following the template structure |
 | `doc-reviewer` | Opus | Reviews draft against template + Amazon standards |
 
-### Project (`.claude/agents/` — this project only)
+### Commands (`~/.claude/commands/`)
 
-| Agent | What it does |
+| Command | What it does |
 |---|---|
-| `doc-orchestrator` | Runs the full pipeline for any doc type |
+| `/new-doc` | Full pipeline for any document type |
+| `/research` | Research phase only |
+| `/outline` | Generate outline from research |
+| `/draft` | Draft from approved outline |
+| `/review` | Review an existing draft |
+
+### Project-only (not installed globally)
+
+| Location | What it is |
+|---|---|
+| `.claude/agents/doc-orchestrator.md` | Pipeline orchestrator agent |
+| `templates/*.md` | Document type templates |
 
 ## Project structure
 
@@ -72,24 +86,26 @@ amazon-doc-agents/
 │   ├── doc-researcher.md
 │   ├── doc-writer.md
 │   └── doc-reviewer.md
-├── templates/                      # One file per document type
+├── templates/                      # Document type templates
 │   ├── 6pager.md
 │   ├── 2pager.md
-│   └── op2-plan.md
+│   ├── 1pager.md
+│   ├── op2-plan.md
+│   └── prfaq.md
 ├── .claude/
 │   ├── settings.json
 │   ├── agents/
 │   │   └── doc-orchestrator.md
-│   └── commands/
+│   └── commands/                   # Source files for global commands
 │       ├── new-doc.md
 │       ├── research.md
 │       ├── outline.md
 │       ├── draft.md
 │       └── review.md
-├── research/
-├── outlines/
-├── drafts/
-└── reviews/
+├── research/                       # Output: research briefs
+├── outlines/                       # Output: approved outlines
+├── drafts/                         # Output: document drafts
+└── reviews/                        # Output: review feedback
 ```
 
 ## Installing on a new machine
@@ -99,15 +115,14 @@ amazon-doc-agents/
 ```bash
 cd amazon-doc-agents
 ./install.sh
-claude .
 ```
 
 ### Windows (manual)
 
-1. Create `%USERPROFILE%\.claude\agents\`
-2. Copy all files from `agents/` into it
-3. Open Claude Code from this project directory
+1. Create `%USERPROFILE%\.claude\agents\` and `%USERPROFILE%\.claude\commands\`
+2. Copy all files from `agents/` into the agents folder
+3. Copy all files from `.claude/commands/` into the commands folder
 
-## Keeping agents up to date
+## Keeping up to date
 
 Re-run `./install.sh` after pulling changes — it overwrites safely.
